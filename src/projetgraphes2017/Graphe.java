@@ -238,11 +238,7 @@ public class Graphe {
     
     int[] GLOUTON(int nbcol,int[] couleur){
         int nbper=nbPermute(nbcol);
-        int colmax=0;
-        for(int i=0;i<couleur.length;i++){
-            if(couleur[i]>colmax)
-                colmax=couleur[i];
-        }
+        int colmax=colmax(couleur);
         
         int[][] tabPermute=new int[nbper][3];
         
@@ -272,10 +268,7 @@ public class Graphe {
                     int[] colperm=Permute(couleur,i,j);
                     ColorGlouton(colperm,i,j);
                     if(verifColMax(colperm,bestcolor)){
-                        colmax=0;//po sur
-                        for(int q=0;q<colperm.length;q++)
-                            if(colperm[q]>colmax)
-                                colmax=colperm[q];
+                        colmax=colmax(colperm);
                         bestcolor=GLOUTON(colmax,colperm);
                     }
                 }
@@ -300,10 +293,7 @@ public class Graphe {
     int[] Permute(int[] couleur,int c1,int c2){
         int colmax=0;
         int[] coltmp=new int[couleur.length];
-        for(int i=0;i<couleur.length;i++){
-            if(couleur[i]>colmax)
-                colmax=couleur[i];
-        }
+        colmax=colmax(couleur);
         int nb=0;
         for(int i=1;i<=colmax;i++){
             for(int j=0;j<coltmp.length;j++){
@@ -326,6 +316,14 @@ public class Graphe {
             }
         }
         return coltmp;
+    }
+    
+    int colmax(int[] t){
+        int x=0;
+        for(int i=0;i<t.length;i++)
+            if(x<t[i])
+                x=t[i];
+        return x;
     }
     
     //effectue la colorisation du retour d'une permutation de glouton
@@ -362,6 +360,8 @@ public class Graphe {
             k--;
         }while(trouve);
         
-        GLOUTON(nbColor,couleur1);
+        int[] colorG=GLOUTON(nbColor,couleur1);
+        
+        int nbcouleur=colmax(colorG);
     }
 }
