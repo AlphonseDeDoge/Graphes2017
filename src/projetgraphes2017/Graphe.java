@@ -12,11 +12,16 @@ import java.io.IOException;
  * @author Nico
  */
 public class Graphe {
-    private int n,proba; //nombre de sommets
+    //nombre de sommet / probabilité d'arete entre chaque points
+    private int n,proba;
+    //liste liaisons entre chaque sommet
     private int[][] adj;
+    //
     private int[] couleur1, couleur2, DSAT, Degre;
     private boolean trouve=false;
     private int[][] point;
+    
+    private int nbColor;
     
     
     // comme en terre 
@@ -68,11 +73,11 @@ public class Graphe {
        }
     }
     
-    public int[][] colToAdj(String col) throws IOException{
+    /*public int[][] colToAdj(String col) throws IOException{
         LectureFichier lf = new LectureFichier(col);
         
         return 
-    }
+    }*/
 
     void affichegraphe(){
         for(int i=0;i<this.n;i++)
@@ -88,20 +93,21 @@ public class Graphe {
         }
     }
 
-
+    //vérifie si les voisins de x on déjà la couleur voulu.
     boolean convient(int x, int c){
         for(int i=0;i<x;i++)
             if(adj[x][i]==1 && (couleur1[i]==c)) return false;
         return true;
     }
 
-
+    //vérifie si les voisins de x on déjà la couleur voulu.
     boolean convient2(int x, int c){
         for(int i=0;i<n;i++)
             if(adj[x][i]==1 && (couleur2[i]==c)) return false;
         return true;
     }
 
+    //prout mdr
     void colorRR(int x, int k){
         if(x==n){
             System.out.println("Colorisation en "+k+" couleurs trouvée");
@@ -120,6 +126,7 @@ public class Graphe {
          //return false;
     }
 
+    //
     void colorexact(int k){
         for(int i=0;i<n;i++)
             couleur1[i]=0;
@@ -161,6 +168,7 @@ public class Graphe {
         System.out.println("DSAT: coloration en "+cmax+"couleurs");
         for(int i=0;i<n;i++)
             System.out.println("couleur de "+i+" : "+couleur2[i]);
+        nbColor=cmax;
         return cmax;
     }
 
@@ -193,4 +201,107 @@ public class Graphe {
             k--;
         }while(trouve);
     }*/
+    
+    
+    int fact(int n){
+        if(n<+1)
+            return 1;
+        else
+            return fact(n-1)*n;
+    }
+    
+    int nbPermute(int coul){
+        
+        if(coul<2)
+            return 0;
+        else if(coul==2)
+            return 1;
+        else
+            return fact(2)/(fact(coul)*fact(coul-2));
+    }
+        
+    void initTabPermute(int[][] tabPermute,int nbper,int colmax){
+        if(colmax>=2){
+            int c=1,colcrnt=c+1;
+            for(int i=0;i<nbper;i++){
+                if(colcrnt==colmax){
+                    c++;
+                    colcrnt=c+1;
+                }
+                tabPermute[i][0]=c;
+                tabPermute[i][1]=colcrnt;
+                tabPermute[i][2]=0;
+                colcrnt++;
+
+            }
+        }
+    }
+    
+    int[] GLOUTON(int nbcol,int[] couleur){
+        int nbper=nbPermute(nbcol);
+        int colmax=0;
+        for(int i=0;i<couleur.length;i++){
+            if(couleur[i]>colmax)
+                colmax=couleur[i];
+        }
+        
+        int[][] tabPermute=new int[nbper][3];
+        
+        initTabPermute(tabPermute,nbper,colmax);
+        
+        int[] bestcolor=couleur;
+        
+        
+        //vérifie si couleur à permute
+        
+        //couleur courante
+        int ccrnt=1;
+        for(int i=0;i<adj.length;i++){
+            ccrnt=couleur[i];
+            boolean ok=false;
+            int j=0;
+            for(j=0;j<adj[i].length;j++){
+                if(adj[i][j]==1){
+                    if(couleur[j]==ccrnt+1)
+                        ok=true;
+                }
+            }
+            //si permutation il y a besoin
+            if(!ok&&couleur[j]!=nbcol){
+                if(verifTabPermute(i,j,tabPermute)){
+                    tabPermute[i][j]=1;
+                    int[] colperm=Permute();
+                }
+            }
+        }
+        
+        
+        return null;
+    }
+    
+    int[] Permute(int[] couleur,int c1,int c2){
+        int[] coltmp=new int[couleur.length];
+        
+    }
+    
+    boolean verifTabPermute(int c1,int c2,int[][] tabp){
+        for(int i=0;i<tabp.length;i++){
+            if(tabp[i][0]==c1&&tabp[i][2]==c2&&tabp[i][2]!=1){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    void Algo(){
+        //application de DSATUR
+        int k=DSATUR();
+        do {
+            trouve=false;
+            colorexact(k);
+            k--;
+        }while(trouve);
+        
+        GLOUTON(nbColor,couleur1);
+    }
 }
