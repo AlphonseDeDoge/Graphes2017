@@ -18,6 +18,7 @@ public class LectureFichier {
     private int nbSommets;
     private int nbAretes;
     private int[][] tab;
+    private int[][] adj;
     
     public LectureFichier(String file) throws IOException{
         
@@ -25,7 +26,28 @@ public class LectureFichier {
         this.setNbAretes(recupNbAretes());
         this.setNbSommets(recupNbSommets());
         this.tab = new int[this.nbAretes][2];
+        this.adj = new int[this.nbSommets][this.nbSommets];
         this.remplirTab(tab);
+        this.tabToAdj();
+        this.afficher();
+        
+    }
+    
+    public void tabToAdj(){
+        for(int i=0;i<this.nbSommets;i++)
+        {
+            for(int j=0;j<this.nbSommets;j++)
+            {
+                this.adj[i][j]=0;
+            }
+        }
+        for(int i=0;i<this.nbAretes;i++)
+        {
+            this.adj[tab[i][0]][tab[i][1]]=1;
+        }
+    }
+    
+    public void afficher(){
         for(int i=0;i<nbAretes;i++)
         {
             for(int j=0;j<2;j++)
@@ -34,7 +56,6 @@ public class LectureFichier {
             }
             System.out.println("");
         }
-        
     }
     
     public int[][] remplirTab(int[][] tab) throws FileNotFoundException, IOException{
@@ -56,8 +77,8 @@ public class LectureFichier {
             {
                 colonne = ligne.split(" ");
                 if(colonne[0].equals("e")){
-                    tab[i][0]=Integer.parseInt(colonne[1]);
-                    tab[i][1]=Integer.parseInt(colonne[2]);
+                    tab[i][0]=Integer.parseInt(colonne[1])-1;
+                    tab[i][1]=Integer.parseInt(colonne[2])-1;
                     i++;
                 }
             }
@@ -145,6 +166,10 @@ public class LectureFichier {
 
     public int getNbAretes() {
         return nbAretes;
+    }
+
+    public int getAdj(int i,int j) {
+        return adj[i][j];
     }
     
 }

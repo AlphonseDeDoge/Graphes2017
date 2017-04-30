@@ -7,6 +7,9 @@ package projetgraphes2017;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -17,7 +20,6 @@ public class Interface extends javax.swing.JFrame {
     Graphe graphe;
     int n;
     int p;
-    int[][] point;
     Boolean init=false;
     /**
      * Creates new form Interface
@@ -35,7 +37,6 @@ public class Interface extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jFileChooser1 = new javax.swing.JFileChooser();
         fenetreGraphe = new javax.swing.JPanel();
         scoreboard = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
@@ -120,8 +121,23 @@ public class Interface extends javax.swing.JFrame {
     }//GEN-LAST:event_genererActionPerformed
 
     private void parcourirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_parcourirActionPerformed
-        this.jFileChooser1.showOpenDialog(this);
-        this.jLabel3.setText(this.jFileChooser1.getSelectedFile().getName());
+        try {
+            
+            LectureFichier lf = new LectureFichier("src/queen10.col");
+            graphe = new Graphe(lf.getNbSommets());
+            for(int i=0;i<lf.getNbSommets();i++)
+            {
+                for(int j=i+1;j<lf.getNbSommets();j++)
+                {
+                    graphe.setAdj(i, j, lf.getAdj(i, j));
+                    
+                }
+            }  
+        } catch (IOException ex) {
+            Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        init=true;
+        repaint();
     }//GEN-LAST:event_parcourirActionPerformed
     
     public void drawCenteredCircle(Graphics g,int x,int y,int radius){
@@ -135,7 +151,6 @@ public class Interface extends javax.swing.JFrame {
         if(init){
         super.paint(g);
         g.setColor(Color.BLACK);
-        //g.drawRect(50, 50 , 500, 500); //Permet de voir le cadre du dessin
         for(int i=0;i<n;i++)
         {
             drawCenteredCircle(g,graphe.getPoint(i, 0)+50,graphe.getPoint(i, 1)+50,5);
@@ -193,7 +208,6 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JButton afficherCol;
     private javax.swing.JPanel fenetreGraphe;
     private javax.swing.JButton generer;
-    private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

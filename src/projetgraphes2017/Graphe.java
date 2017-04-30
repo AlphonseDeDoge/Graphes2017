@@ -29,6 +29,15 @@ public class Graphe {
         this.point=new int[nbSommets][2];
     }
     
+    public Graphe(int nbSommets){
+        setN(nbSommets);
+        this.adj=new int[nbSommets][nbSommets];
+        this.couleur1=new int[nbSommets];
+        this.couleur2=new int[nbSommets];
+        this.DSAT=new int[nbSommets];
+        this.Degre=new int[nbSommets];
+        this.point=new int[nbSommets][2];
+    }
     
     public int getN() {
         return n;
@@ -50,6 +59,14 @@ public class Graphe {
         return adj[i][j];
     }
     
+    public void setAdj(int i,int j,int val) {
+        this.adj[i][j] = val;
+    }
+
+    public void setPoint(int i,int j,int val) {
+        this.point[i][j] = val;
+    }
+    
     public int getPoint(int i,int j) {
         return point[i][j];
     }
@@ -64,12 +81,6 @@ public class Graphe {
             else adj[i][j]=adj[j][i]=0;
        }
     }
-    
-    /*public int[][] colToAdj(String col) throws IOException{
-        LectureFichier lf = new LectureFichier(col);
-        
-        return 
-    }*/
 
     void affichegraphe(){
         for(int i=0;i<this.n;i++)
