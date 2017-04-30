@@ -18,6 +18,9 @@ public class Graphe {
     private boolean trouve=false;
     private int[][] point;
     
+    
+    // comme en terre 
+    
     public Graphe(int nbSommets,int probaAretes){
         setN(nbSommets);
         setProba(probaAretes);
