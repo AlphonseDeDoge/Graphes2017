@@ -65,11 +65,11 @@ public class Graphe {
        }
     }
     
-    public int[][] colToAdj(String col) throws IOException{
+    /*public int[][] colToAdj(String col) throws IOException{
         LectureFichier lf = new LectureFichier(col);
         
         return 
-    }
+    }*/
 
     void affichegraphe(){
         for(int i=0;i<this.n;i++)
