@@ -107,7 +107,6 @@ public class Graphe {
         return true;
     }
 
-    //prout mdr
     void colorRR(int x, int k){
         if(x==n){
             System.out.println("Colorisation en "+k+" couleurs trouvée");
@@ -270,18 +269,79 @@ public class Graphe {
             if(!ok&&couleur[j]!=nbcol){
                 if(verifTabPermute(i,j,tabPermute)){
                     tabPermute[i][j]=1;
-                    int[] colperm=Permute();
+                    int[] colperm=Permute(couleur,i,j);
+                    ColorGlouton(colperm,i,j);
+                    if(verifColMax(colperm,bestcolor)){
+                        colmax=0;//po sur
+                        for(int q=0;q<colperm.length;q++)
+                            if(colperm[q]>colmax)
+                                colmax=colperm[q];
+                        bestcolor=GLOUTON(colmax,colperm);
+                    }
                 }
             }
+        }        
+        return bestcolor;
+    }
+    
+    boolean verifColMax(int[] a,int[] b){
+        int amax=0,bmax=0;
+        for(int i=0;i<a.length;i++){
+            if(a[i]>amax)
+                amax=a[i];
+            if(b[i]>bmax)
+                bmax=b[i];
         }
-        
-        
-        return null;
+        if(amax>=bmax)
+            return false;
+        return true;
     }
     
     int[] Permute(int[] couleur,int c1,int c2){
+        int colmax=0;
         int[] coltmp=new int[couleur.length];
-        
+        for(int i=0;i<couleur.length;i++){
+            if(couleur[i]>colmax)
+                colmax=couleur[i];
+        }
+        int nb=0;
+        for(int i=1;i<=colmax;i++){
+            for(int j=0;j<coltmp.length;j++){
+                if(i==c1){
+                    if(couleur[j]==c2){
+                        coltmp[nb]=j;
+                        nb++;
+                    }
+                }
+                else if(i==c2){
+                    if(couleur[j]==c1){
+                        coltmp[nb]=j;
+                        nb++;
+                    }
+                }
+                else if(couleur[j]==i){
+                    coltmp[nb]=j;
+                    nb++;   
+                }
+            }
+        }
+        return coltmp;
+    }
+    
+    //effectue la colorisation du retour d'une permutation de glouton
+    void ColorGlouton(int[] tabcol,int indice, int nbcol){
+        for(int c=1;c<=nbcol;c++)
+            if(convi1(tabcol,indice,c)){
+                tabcol[indice]=c;
+                ColorGlouton(tabcol,indice+1,nbcol);
+                if(trouve) return;
+            }
+    }
+    
+    boolean convi1(int[] tabcol,int indice, int coul){
+        for(int i=0;i<indice;i++)
+            if(adj[indice][i]==1 && (tabcol[i]==coul)) return false;
+        return true;
     }
     
     boolean verifTabPermute(int c1,int c2,int[][] tabp){
