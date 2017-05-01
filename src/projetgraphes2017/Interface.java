@@ -158,6 +158,7 @@ public class Interface extends javax.swing.JFrame {
         this.affiche="INFORMATION GRAPHE :\n";
         this.affiche+="nombre de sommet : "+n+"\n";
         this.affiche+="nombre d'arête : "+graphe.nbArete()+"\n";
+        this.Board.setText(affiche);
     }//GEN-LAST:event_genererActionPerformed
 
     private void parcourirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_parcourirActionPerformed
@@ -173,6 +174,10 @@ public class Interface extends javax.swing.JFrame {
     }//GEN-LAST:event_parcourirActionPerformed
 
     private void afficherColActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_afficherColActionPerformed
+        this.affiche="";
+        this.affiche="INFORMATION GRAPHE :\n";
+        this.affiche+="nombre de sommet : "+n+"\n";
+        this.affiche+="nombre d'arête : "+graphe.nbArete()+"\n";
         affiche+=graphe.Algo();
         this.Board.setText(affiche);
     }//GEN-LAST:event_afficherColActionPerformed

@@ -125,7 +125,7 @@ public class LectureFichier {
             else
             {
                 colonne = ligne.split(" ");
-                if(colonne[0].equals("e")){
+                if(colonne[0].equals("r")){
                     int x=Integer.parseInt(colonne[2]);
                     col[Integer.parseInt(colonne[1])-1]=x;
                     i++;
