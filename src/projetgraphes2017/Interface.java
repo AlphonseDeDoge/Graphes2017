@@ -1,12 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package projetgraphes2017;
 
-import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.*;
+import java.io.File;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -88,6 +85,11 @@ public class Interface extends javax.swing.JFrame {
         jPanel1.add(generer);
 
         afficherCol.setText("Afficher coloration");
+        afficherCol.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                afficherColActionPerformed(evt);
+            }
+        });
         jPanel1.add(afficherCol);
 
         scoreboard.add(jPanel1, java.awt.BorderLayout.PAGE_START);
@@ -120,9 +122,18 @@ public class Interface extends javax.swing.JFrame {
     }//GEN-LAST:event_genererActionPerformed
 
     private void parcourirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_parcourirActionPerformed
-        this.jFileChooser1.showOpenDialog(this);
-        this.jLabel3.setText(this.jFileChooser1.getSelectedFile().getName());
+        JFileChooser fc = new JFileChooser();
+        FileNameExtensionFilter fnef=new FileNameExtensionFilter("colonne","col");
+        fc.setFileFilter(fnef);
+        if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            File f = fc.getSelectedFile();
+            System.out.println("fichier : "+f.getPath());
+        }
     }//GEN-LAST:event_parcourirActionPerformed
+
+    private void afficherColActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_afficherColActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_afficherColActionPerformed
     
     public void drawCenteredCircle(Graphics g,int x,int y,int radius){
         g.fillOval(x-radius, y-radius, radius*2, radius*2);

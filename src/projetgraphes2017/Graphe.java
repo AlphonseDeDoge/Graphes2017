@@ -244,23 +244,26 @@ public class Graphe {
         
         initTabPermute(tabPermute,nbper,colmax);
         
-        int[] bestcolor=couleur;
-        
+        int[] bestcolor=couleur;    
         
         //vérifie si couleur à permute
         
+        int[][] adjtmp=adj;
         //couleur courante
-        int ccrnt=1;
-        for(int i=0;i<adj.length;i++){
-            ccrnt=couleur[i];
+        for(int i=0;i<adjtmp.length;i++){
             boolean ok=false;
             int j=0;
-            for(j=0;j<adj[i].length;j++){
-                if(adj[i][j]==1){
-                    if(couleur[j]==ccrnt+1)
+            //vérifie sur chaque point si au moins 1 point associé est 
+            int ccrnt=couleur[i];
+            do{
+                if(adjtmp[i][j]==1){
+                    if(couleur[j]==ccrnt+1&&couleur[j]!=colmax){ // possible soucis
                         ok=true;
+                        adjtmp[i][j]=0;
+                    }
                 }
-            }
+                j++;
+            }while(!ok||j!=adjtmp[i].length);
             //si permutation il y a besoin
             if(!ok&&couleur[j]!=nbcol){
                 if(verifTabPermute(i,j,tabPermute)){
