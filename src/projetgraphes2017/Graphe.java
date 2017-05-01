@@ -88,26 +88,6 @@ public class Graphe {
             else adj[i][j]=adj[j][i]=0;
        }
     }
-    
-    /*public int[][] colToAdj(String col) throws IOException{
-        LectureFichier lf = new LectureFichier(col);
-        
-        return 
-    }*/
-
-    /*void affichegraphe(){
-        for(int i=0;i<this.n;i++)
-        {
-            for(int j=0;j<this.n;j++)
-            {
-                if(adj[i][j]==0)
-                    System.out.print("0 ");
-                else
-                    System.out.print("1 ");
-            }
-            System.out.println("");
-        }
-    }*/
 
     //vérifie si les voisins de x on déjà la couleur voulu.
     boolean convient(int x, int c){
@@ -124,36 +104,26 @@ public class Graphe {
     }
 
     void colorRR(int x, int k){
-        System.out.println("colorRR x : "+x+" k : "+k);
         if(x==n){
-            /*System.out.println("Colorisation en "+k+" couleurs trouvée");
-            for(int i=0;i<n;i++)
-                System.out.println("Couleur de "+i+" : "+couleur1[i]);*/
             trouve=true;
         }
         else
         for(int c=1;c<=k;c++)
             if(convient(x,c)){
                 couleur1[x]=c;
-                //System.out.println("couleur de "+x+" : "+couleur1[x]);
                 colorRR(x+1,k);
                 if(trouve) return;
             }
-         //return false;
     }
 
     //
     void colorexact(int k){
-        System.out.println("colorexact k : "+k);
         for(int i=0;i<n;i++)
             couleur1[i]=0;
             colorRR(0,k);
-            /*if(!trouve)
-                System.out.println("Pas de colorisation en "+k+"couleurs");*/
     }
 
     int dsatMax(){
-        System.out.println("DsatMax");
         int maxDeg=-1,maxDSAT=-1,smax=0;
         for(int i=0;i<n;i++)
         if(couleur2[i]==0 && (DSAT[i]>maxDSAT || (DSAT[i]==maxDSAT && Degre[i]>maxDeg))){
@@ -163,7 +133,6 @@ public class Graphe {
     }
 
     int DSATUR(){
-        System.out.println("DSATUR");
         int nb=0,c,x,cmax=0;
         for(int i=0;i<n;i++){
             couleur2[i]=0; DSAT[i]=0; Degre[i]=0;
@@ -285,25 +254,17 @@ public class Graphe {
                     }
                 }
                 j++;
-                System.out.println(i+j);
             }
-            
-            //System.out.println("taille adj "+adjtmp.length);
-            //System.out.println("taille adj["+i+"] "+adjtmp[i].length);
-            //System.out.println("taille couleur "+couleur.length);
-            
             //si permutation il y a besoin
             if(!ok&&couleur[j]!=nbcol){
                 if(verifTabPermute(i,j,tabPermute)){
                     tabPermute[i][j]=1;
-                    System.out.println("passage permute");
                     int[] colperm=Permute(couleur,i,j);
                     ColorGlouton(colperm,i,j);
                     if(verifColMax(colperm,bestcolor)){
                         colmax=colmax(colperm);
-                        System.out.println("passage glouton");
-                        bestcolor=colperm;
-                        //bestcolor=GLOUTON(colmax,colperm);
+                        //bestcolor=colperm; //non récursivité
+                        bestcolor=GLOUTON(colmax,colperm); //récursivité
                     }
                 }
             }
@@ -357,7 +318,7 @@ public class Graphe {
         for(int i=0;i<t.length;i++)
             if(x<t[i])
                 x=t[i];
-        return x+1;
+        return x;
     }
     
     //effectue la colorisation du retour d'une permutation de glouton
@@ -384,28 +345,26 @@ public class Graphe {
         }
         return false;
     }
+    
+    int nbArete(){
+        int nb=0;
+        for(int i=0;i<adj.length;i++){
+            for(int j=0;j<adj[i].length;j++)
+                if(adj[i][j]==1)
+                    nb++;
+        }
+        return nb;
+    }
 
-    void Algo(){
+    String Algo(){
         //application de DSATUR
         genere();
         int k=DSATUR();
-        do {
-            trouve=false;
-            colorexact(k);
-            k--;
-        }while(trouve);
         
-        /*int[] colorG=GLOUTON(nbColor,couleur1);
+        int[] colorG=GLOUTON(nbColor,couleur2);
         
-        for(int i=0;i<colorG.length;i++)
-            System.out.println("couleur "+i+" : "+colorG[i]);
-        System.out.println("s");*/
-        for(int i=0;i<couleur1.length;i++)
-            System.out.println("couleur "+i+" : "+couleur1[i]);
+        int nbcouleur=colmax(colorG);
         
-        //int nbcouleur=colmax(colorG);
-        
-        System.out.println("coloration DSATUR : "+nbColor);
-        //System.out.println("Coloration de Glouton : "+nbcouleur);
+        return "\nColoration :\n\t- DSATUR : "+nbColor+"\n\t- Glouton : "+nbcouleur;
     }
 }

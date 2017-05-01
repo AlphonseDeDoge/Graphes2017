@@ -19,6 +19,7 @@ public class LectureFichier {
     private int nbSommets;
     private int nbAretes;
     private int[][] tab;
+    private int[] couleur;
     
     public LectureFichier(String file) throws IOException{
         
@@ -27,6 +28,8 @@ public class LectureFichier {
         this.setNbSommets(recupNbSommets());
         this.tab = new int[this.nbAretes][2];
         this.remplirTab(tab);
+        this.couleur = new int[this.nbSommets];
+        this.remplirTabCouleur(couleur);
         /*for(int i=0;i<nbAretes;i++)
         {
             for(int j=0;j<2;j++)
@@ -98,6 +101,33 @@ public class LectureFichier {
                 if(colonne[0].equals("e")){
                     tab[i][0]=Integer.parseInt(colonne[1])-1;
                     tab[i][1]=Integer.parseInt(colonne[2])-1;
+                    i++;
+                }
+            }
+        }            
+    }
+    
+    public void remplirTabCouleur(int[] col) throws FileNotFoundException, IOException{
+        
+        int i=0;
+        Boolean vide = false;
+        String ligne;
+        String[] colonne = new String[100];
+        BufferedReader br = new BufferedReader(new FileReader(this.getFile()));
+        
+        
+        while(vide==false){
+            
+            ligne = br.readLine();
+            if(ligne==null){
+                vide = true;
+            }
+            else
+            {
+                colonne = ligne.split(" ");
+                if(colonne[0].equals("e")){
+                    int x=Integer.parseInt(colonne[2]);
+                    col[Integer.parseInt(colonne[1])-1]=x;
                     i++;
                 }
             }
