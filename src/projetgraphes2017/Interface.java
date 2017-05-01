@@ -40,9 +40,10 @@ public class Interface extends javax.swing.JFrame {
         afficherCol = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        parcourir = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         Board = new javax.swing.JTextArea();
+        enregistrer = new javax.swing.JButton();
+        parcourir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -53,7 +54,7 @@ public class Interface extends javax.swing.JFrame {
         fenetreGraphe.setLayout(fenetreGrapheLayout);
         fenetreGrapheLayout.setHorizontalGroup(
             fenetreGrapheLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 288, Short.MAX_VALUE)
+            .addGap(0, 231, Short.MAX_VALUE)
         );
         fenetreGrapheLayout.setVerticalGroup(
             fenetreGrapheLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -95,6 +96,21 @@ public class Interface extends javax.swing.JFrame {
         jPanel2.setLayout(new java.awt.BorderLayout());
         jPanel2.add(jLabel3, java.awt.BorderLayout.SOUTH);
 
+        Board.setEditable(false);
+        Board.setColumns(20);
+        Board.setRows(5);
+        jScrollPane1.setViewportView(Board);
+
+        jPanel2.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
+        enregistrer.setText("Enregistrer graphe");
+        enregistrer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                enregistrerActionPerformed(evt);
+            }
+        });
+        jPanel2.add(enregistrer, java.awt.BorderLayout.SOUTH);
+
         scoreboard.add(jPanel2, java.awt.BorderLayout.LINE_START);
 
         parcourir.setText("Parcourir...");
@@ -104,13 +120,6 @@ public class Interface extends javax.swing.JFrame {
             }
         });
         scoreboard.add(parcourir, java.awt.BorderLayout.SOUTH);
-
-        Board.setEditable(false);
-        Board.setColumns(20);
-        Board.setRows(5);
-        jScrollPane1.setViewportView(Board);
-
-        scoreboard.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         getContentPane().add(scoreboard, java.awt.BorderLayout.LINE_END);
 
@@ -127,8 +136,6 @@ public class Interface extends javax.swing.JFrame {
             for(int i=0;i<lf.getNbSommets();i++){
                 this.graphe.setPoint(i, 0, lf.getGraphe().getPoint(i, 0));
                 this.graphe.setPoint(i, 1, lf.getGraphe().getPoint(i, 1));
-                System.out.print(this.graphe.getPoint(i, 0)+" :x | ");
-                System.out.println(this.graphe.getPoint(i, 1)+" :y");
             }
             
             for(int i=0;i<n;i++)
@@ -157,7 +164,7 @@ public class Interface extends javax.swing.JFrame {
         this.affiche="";
         this.affiche="INFORMATION GRAPHE :\n";
         this.affiche+="nombre de sommet : "+n+"\n";
-        this.affiche+="nombre d'arête : "+graphe.nbArete()+"\n";
+        this.affiche+="nombre d'arête : "+graphe.getNbArete()+"\n";
         this.Board.setText(affiche);
     }//GEN-LAST:event_genererActionPerformed
 
@@ -177,10 +184,18 @@ public class Interface extends javax.swing.JFrame {
         this.affiche="";
         this.affiche="INFORMATION GRAPHE :\n";
         this.affiche+="nombre de sommet : "+n+"\n";
-        this.affiche+="nombre d'arête : "+graphe.nbArete()+"\n";
+        this.affiche+="nombre d'arête : "+graphe.getNbArete()+"\n";
         affiche+=graphe.Algo();
         this.Board.setText(affiche);
     }//GEN-LAST:event_afficherColActionPerformed
+
+    private void enregistrerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enregistrerActionPerformed
+        try {
+            EcritureFichier ef = new EcritureFichier("G:/Users/Nico/Documents/NetBeansProjects/ProjetGraphes2017/src","test.res",this.graphe);
+        } catch (IOException ex) {
+            Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_enregistrerActionPerformed
     
     public void drawCenteredCircle(Graphics g,int x,int y,int radius){
         g.fillOval(x-radius, y-radius, radius*2, radius*2);
@@ -252,6 +267,7 @@ public class Interface extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea Board;
     private javax.swing.JButton afficherCol;
+    private javax.swing.JButton enregistrer;
     private javax.swing.JPanel fenetreGraphe;
     private javax.swing.JButton generer;
     private javax.swing.JFileChooser jFileChooser1;

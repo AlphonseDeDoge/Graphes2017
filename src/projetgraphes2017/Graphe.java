@@ -88,6 +88,16 @@ public class Graphe {
             else adj[i][j]=adj[j][i]=0;
        }
     }
+    
+    public void equals(Graphe g1){
+       for(int i=0;i<n;i++)
+       {
+           for(int j=0;j<n;j++)
+           {
+               this.adj[i][j] = g1.getAdj(i, j);
+           }
+       }
+    }
 
     //vérifie si les voisins de x on déjà la couleur voulu.
     boolean convient(int x, int c){
@@ -319,10 +329,10 @@ public class Graphe {
         return ok;
     }
     
-    int nbArete(){
+    int getNbArete(){
         int nb=0;
         for(int i=0;i<adj.length;i++){
-            for(int j=0;j<adj[i].length;j++)
+            for(int j=i;j<adj[i].length;j++)
                 if(adj[i][j]==1)
                     nb++;
         }
