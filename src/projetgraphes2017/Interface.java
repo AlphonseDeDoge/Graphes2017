@@ -5,10 +5,6 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-/**
- *
- * @author Nico
- */
 public class Interface extends javax.swing.JFrame {
 
     Graphe graphe;
@@ -16,6 +12,7 @@ public class Interface extends javax.swing.JFrame {
     int p;
     int[][] point;
     Boolean init=false;
+    String scrboard="";
     /**
      * Creates new form Interface
      */
@@ -45,6 +42,8 @@ public class Interface extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         parcourir = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        Board = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -55,7 +54,7 @@ public class Interface extends javax.swing.JFrame {
         fenetreGraphe.setLayout(fenetreGrapheLayout);
         fenetreGrapheLayout.setHorizontalGroup(
             fenetreGrapheLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 333, Short.MAX_VALUE)
+            .addGap(0, 288, Short.MAX_VALUE)
         );
         fenetreGrapheLayout.setVerticalGroup(
             fenetreGrapheLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -107,6 +106,13 @@ public class Interface extends javax.swing.JFrame {
         });
         scoreboard.add(parcourir, java.awt.BorderLayout.SOUTH);
 
+        Board.setEditable(false);
+        Board.setColumns(20);
+        Board.setRows(5);
+        jScrollPane1.setViewportView(Board);
+
+        scoreboard.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
         getContentPane().add(scoreboard, java.awt.BorderLayout.LINE_END);
 
         pack();
@@ -118,12 +124,21 @@ public class Interface extends javax.swing.JFrame {
         graphe = new Graphe(n,p);
         graphe.genere();
         init=true;
+        this.scrboard="";
+        this.Board.setText("");
+        
+        /*
+        récupération nombre arete
+        récupération nombre de sommet        
+        */
+        
+        
         repaint(); //pas sûr que ce soit vraiment ici
     }//GEN-LAST:event_genererActionPerformed
 
     private void parcourirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_parcourirActionPerformed
         JFileChooser fc = new JFileChooser();
-        FileNameExtensionFilter fnef=new FileNameExtensionFilter("colonne","col");
+        FileNameExtensionFilter fnef=new FileNameExtensionFilter("colonne","col","res");
         fc.setFileFilter(fnef);
         if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
             File f = fc.getSelectedFile();
@@ -132,7 +147,8 @@ public class Interface extends javax.swing.JFrame {
     }//GEN-LAST:event_parcourirActionPerformed
 
     private void afficherColActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_afficherColActionPerformed
-        graphe.Algo();
+        scrboard+=graphe.Algo();
+        this.Board.setText(scrboard);
     }//GEN-LAST:event_afficherColActionPerformed
     
     public void drawCenteredCircle(Graphics g,int x,int y,int radius){
@@ -201,6 +217,7 @@ public class Interface extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextArea Board;
     private javax.swing.JButton afficherCol;
     private javax.swing.JPanel fenetreGraphe;
     private javax.swing.JButton generer;
@@ -210,6 +227,7 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField nbSommets;
     private javax.swing.JButton parcourir;
     private javax.swing.JTextField proba;
