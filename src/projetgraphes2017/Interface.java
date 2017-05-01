@@ -186,7 +186,10 @@ public class Interface extends javax.swing.JFrame {
         this.affiche="INFORMATION GRAPHE :\n";
         this.affiche+="nombre de sommet : "+n+"\n";
         this.affiche+="nombre d'arête : "+graphe.getNbArete()+"\n";
-        affiche+=graphe.Algo();
+        affiche+=graphe.Algo()+"\n";
+        affiche+="\n";
+        for(int i=0;i<n;i++)
+            affiche+="      point "+i+" : "+graphe.getCouleur(i)+"\n";
         this.Board.setText(affiche);
     }//GEN-LAST:event_afficherColActionPerformed
 

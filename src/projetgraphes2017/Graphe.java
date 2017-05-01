@@ -47,7 +47,7 @@ public class Graphe {
     }
     
     public int getCouleur(int i){
-        return this.couleur2[i];
+        return couleur2[i];
     }
     
     public int getN() {
@@ -226,6 +226,7 @@ public class Graphe {
                     if(couleur[j]==couleur[i]+1){ // possible soucis&&couleur[j]!=colmax
                         ok=true;
                         adjtmp[i][j]=0;
+                        adjtmp[j][i]=0;
                     }
                 }
                 j++;
@@ -242,11 +243,11 @@ public class Graphe {
                     
                     int[] colperm=Permute(couleur,i,j);
                     
-                    ColorGlouton(colperm,0,j);
+                    ColorGlouton(colperm);
                     if(verifColMax(colperm,bestcolor)){
                         colmax=colmax(colperm);
-                        //bestcolor=colperm; //non récursivité
-                        bestcolor=GLOUTON(colmax,colperm); //récursivité
+                        bestcolor=colperm; //non récursivité
+                        //bestcolor=GLOUTON(colmax,colperm); //récursivité
                     }
                 }
             }
@@ -303,24 +304,25 @@ public class Graphe {
         return x;
     }
     
-    //effectue la colorisation du retour d'une permutation de glouton
-    void ColorGlouton(int[] tabcol,int indice, int nbcol){
-        if(indice==n)
-            trouve=true;
-        else
-            for(int c=1;c<=nbcol;c++)
-                if(convi1(tabcol,indice,c)){
-                    tabcol[indice]=c;
-                    ColorGlouton(tabcol,indice+1,nbcol);
-                    if(trouve) return;
+    void ColorGlouton(int[] tabcol){
+        int[] tabp=new int[n];
+        for(int i=0;i<n;i++){
+            tabp[i]=tabcol[i];
+            tabcol[i]=0;
+        }
+        for(int i=0;i<n;i++){
+            int p=tabp[i];
+            int c=1,j=0;
+            while(j<n){
+                if(adj[p][j]==1 && tabcol[j]==c){
+                    j=0;
+                    c++;
                 }
-    }
-    
-    boolean convi1(int[] tabcol,int indice, int coul){
-        for(int i=0;i<indice;i++)
-            if(adj[indice][i]==1 && tabcol[i]==coul)
-                return false;
-        return true;
+                else
+                    j++;
+            }
+            tabcol[p]=c;
+        } 
     }
     
     boolean verifTabPermute(int c1,int c2,int[][] tabp){
@@ -357,6 +359,6 @@ public class Graphe {
         if(verifColMax(colorG,couleur2))
             couleur2=colorG;
         
-        return "\nColoration :\n\t- DSATUR : "+nbColor+"\n\t- Glouton : "+nbcouleur;
+        return "\nColoration :\n    - DSATUR : "+nbColor+"\n    - Glouton : "+nbcouleur;
     }
 }
