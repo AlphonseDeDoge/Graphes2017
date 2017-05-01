@@ -145,6 +145,7 @@ public class Interface extends javax.swing.JFrame {
                     this.graphe.setAdj(i, j, lf.getGraphe().getAdj(i, j));
                 }
             }
+            
             init = true;
             
         } catch (IOException ex) {

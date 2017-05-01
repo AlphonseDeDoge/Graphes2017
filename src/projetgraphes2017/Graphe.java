@@ -46,6 +46,10 @@ public class Graphe {
         this.point=new int[nbSommets][2];
     }
     
+    public int getCouleur(int i){
+        return this.couleur2[i];
+    }
+    
     public int getN() {
         return n;
     }

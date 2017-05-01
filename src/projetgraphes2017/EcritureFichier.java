@@ -50,6 +50,9 @@ public class EcritureFichier {
                     }
                 }
             }
+            for(int i=0;i<g.getN();i++){
+                bw.write("r "+i+" "+g.getCouleur(i)+"\n");
+            }
             
             System.out.println("Ecriture ok");
         }catch(IOException e){
