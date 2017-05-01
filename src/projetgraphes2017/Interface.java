@@ -1,15 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package projetgraphes2017;
 
-import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -20,6 +17,8 @@ public class Interface extends javax.swing.JFrame {
     Graphe graphe;
     int n;
     int p;
+    String path;
+    Boolean fichierCol=false;
     Boolean init=false;
     /**
      * Creates new form Interface
@@ -37,6 +36,7 @@ public class Interface extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jFileChooser1 = new javax.swing.JFileChooser();
         fenetreGraphe = new javax.swing.JPanel();
         scoreboard = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
@@ -89,6 +89,11 @@ public class Interface extends javax.swing.JFrame {
         jPanel1.add(generer);
 
         afficherCol.setText("Afficher coloration");
+        afficherCol.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                afficherColActionPerformed(evt);
+            }
+        });
         jPanel1.add(afficherCol);
 
         scoreboard.add(jPanel1, java.awt.BorderLayout.PAGE_START);
@@ -112,33 +117,58 @@ public class Interface extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void genererActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_genererActionPerformed
-        this.n = Integer.parseInt(this.nbSommets.getText());
-        this.p = Integer.parseInt(this.proba.getText());
-        graphe = new Graphe(n,p);
-        graphe.genere();
-        init=true;
-        repaint(); //pas sûr que ce soit vraiment ici
-    }//GEN-LAST:event_genererActionPerformed
-
-    private void parcourirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_parcourirActionPerformed
-        try {
+        if(this.fichierCol){
+            //Recup le path du fichier, convertir le fichier .col en adj et en points
+            try {
+            LectureFichier lf = new LectureFichier(this.path);
+            this.graphe = new Graphe(lf.getNbSommets());
+            this.n=lf.getNbSommets();
+            for(int i=0;i<lf.getNbSommets();i++){
+                this.graphe.setPoint(i, 0, lf.getGraphe().getPoint(i, 0));
+                this.graphe.setPoint(i, 1, lf.getGraphe().getPoint(i, 1));
+                System.out.print(this.graphe.getPoint(i, 0)+" :x | ");
+                System.out.println(this.graphe.getPoint(i, 1)+" :y");
+            }
             
-            LectureFichier lf = new LectureFichier("src/queen10.col");
-            graphe = new Graphe(lf.getNbSommets());
-            for(int i=0;i<lf.getNbSommets();i++)
+            for(int i=0;i<n;i++)
             {
-                for(int j=i+1;j<lf.getNbSommets();j++)
+                for(int j=0;j<n;j++)
                 {
-                    graphe.setAdj(i, j, lf.getAdj(i, j));
-                    
+                    this.graphe.setAdj(i, j, lf.getGraphe().getAdj(i, j));
                 }
-            }  
+            }
+            init = true;
+            
         } catch (IOException ex) {
             Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
         }
-        init=true;
         repaint();
+        }
+        else{
+            this.n = Integer.parseInt(this.nbSommets.getText());
+            this.p = Integer.parseInt(this.proba.getText());
+            graphe = new Graphe(n,p);
+            graphe.genere();
+            init=true;
+        }
+        repaint(); 
+    }//GEN-LAST:event_genererActionPerformed
+
+    private void parcourirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_parcourirActionPerformed
+        JFileChooser fc = new JFileChooser();
+        FileNameExtensionFilter fnef=new FileNameExtensionFilter("colonne","col");
+        fc.setFileFilter(fnef);
+        if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            File f = fc.getSelectedFile();
+            this.path=f.getAbsolutePath();
+            System.out.println("fichier : "+f.getPath());
+        }
+        this.fichierCol=true;
     }//GEN-LAST:event_parcourirActionPerformed
+
+    private void afficherColActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_afficherColActionPerformed
+        graphe.Algo();
+    }//GEN-LAST:event_afficherColActionPerformed
     
     public void drawCenteredCircle(Graphics g,int x,int y,int radius){
         g.fillOval(x-radius, y-radius, radius*2, radius*2);
@@ -151,10 +181,13 @@ public class Interface extends javax.swing.JFrame {
         if(init){
         super.paint(g);
         g.setColor(Color.BLACK);
+        g.drawRect(50, 50 , 500, 500); //Permet de voir le cadre du dessin
+        g.setColor(Color.RED);
         for(int i=0;i<n;i++)
         {
             drawCenteredCircle(g,graphe.getPoint(i, 0)+50,graphe.getPoint(i, 1)+50,5);
         }
+        g.setColor(Color.BLACK);
         for(int i=0;i<n;i++)
         {
             for(int j=i+1;j<n;j++)
@@ -208,6 +241,7 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JButton afficherCol;
     private javax.swing.JPanel fenetreGraphe;
     private javax.swing.JButton generer;
+    private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

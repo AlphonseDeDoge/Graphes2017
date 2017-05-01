@@ -14,11 +14,11 @@ import java.lang.*;
  */
 public class LectureFichier {
     
+    private Graphe graphe;
     private String file;
     private int nbSommets;
     private int nbAretes;
     private int[][] tab;
-    private int[][] adj;
     
     public LectureFichier(String file) throws IOException{
         
@@ -26,29 +26,8 @@ public class LectureFichier {
         this.setNbAretes(recupNbAretes());
         this.setNbSommets(recupNbSommets());
         this.tab = new int[this.nbAretes][2];
-        this.adj = new int[this.nbSommets][this.nbSommets];
         this.remplirTab(tab);
-        this.tabToAdj();
-        this.afficher();
-        
-    }
-    
-    public void tabToAdj(){
-        for(int i=0;i<this.nbSommets;i++)
-        {
-            for(int j=0;j<this.nbSommets;j++)
-            {
-                this.adj[i][j]=0;
-            }
-        }
-        for(int i=0;i<this.nbAretes;i++)
-        {
-            this.adj[tab[i][0]][tab[i][1]]=1;
-        }
-    }
-    
-    public void afficher(){
-        for(int i=0;i<nbAretes;i++)
+        /*for(int i=0;i<nbAretes;i++)
         {
             for(int j=0;j<2;j++)
             {
@@ -56,9 +35,49 @@ public class LectureFichier {
             }
             System.out.println("");
         }
+        
+        System.out.println("nb Aretes"+this.nbAretes);*/
+        
+        this.colToGraphe();
+        
     }
     
-    public int[][] remplirTab(int[][] tab) throws FileNotFoundException, IOException{
+    public void colToGraphe(){
+        graphe = new Graphe(this.nbSommets);
+        for(int i=0;i<this.nbAretes;i++){
+            graphe.setAdj(this.tab[i][0], this.tab[i][1], 1);
+        }
+          
+        //affichage adj
+        /*for(int i=0;i<nbSommets;i++)
+        {
+            for(int j=0;j<nbSommets;j++)
+            {
+                System.out.print(graphe.getAdj(i, j)+" ");
+            }
+            System.out.println("");
+        }*/
+        
+        for(int i=0;i<this.nbSommets;i++){
+            this.graphe.setPoint(i, 0, (int)(Math.random()*500+1));
+            this.graphe.setPoint(i, 1, (int)(Math.random()*500+1));
+        }
+        
+        /*for(int i=0;i<nbSommets;i++)
+        {
+            for(int j=0;j<2;j++)
+            {
+                System.out.print(graphe.getPoint(i, j)+" ");
+            }
+            System.out.println("");
+        }   */
+    }
+
+    public Graphe getGraphe() {
+        return graphe;
+    }
+    
+    public void remplirTab(int[][] tab) throws FileNotFoundException, IOException{
         
         int i=0;
         Boolean vide = false;
@@ -82,10 +101,7 @@ public class LectureFichier {
                     i++;
                 }
             }
-        }
- 
-        return tab;
-                
+        }            
     }
     
     public int recupNbSommets() throws FileNotFoundException, IOException{
@@ -166,10 +182,6 @@ public class LectureFichier {
 
     public int getNbAretes() {
         return nbAretes;
-    }
-
-    public int getAdj(int i,int j) {
-        return adj[i][j];
     }
     
 }
