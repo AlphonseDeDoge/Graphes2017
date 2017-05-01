@@ -132,7 +132,7 @@ public class Interface extends javax.swing.JFrame {
     }//GEN-LAST:event_parcourirActionPerformed
 
     private void afficherColActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_afficherColActionPerformed
-        // TODO add your handling code here:
+        graphe.Algo();
     }//GEN-LAST:event_afficherColActionPerformed
     
     public void drawCenteredCircle(Graphics g,int x,int y,int radius){
