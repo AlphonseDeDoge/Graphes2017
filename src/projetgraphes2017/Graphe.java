@@ -350,6 +350,9 @@ public class Graphe {
         
         int nbcouleur=colmax(colorG);
         
+        if(verifColMax(colorG,couleur2))
+            couleur2=colorG;
+        
         return "\nColoration :\n\t- DSATUR : "+nbColor+"\n\t- Glouton : "+nbcouleur;
     }
 }
